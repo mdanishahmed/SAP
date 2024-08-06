@@ -36,6 +36,7 @@ AT SELECTION-SCREEN OUTPUT
 This event is triggered before the selection screen is displayed to the user. It is used to modify the selection screen dynamically, such as hiding or showing fields, changing field properties, or setting default values based on certain conditions.
 
 Dynamic Screen Modification: For example, if you have a selection screen with a checkbox and you want certain input fields to appear only when the checkbox is selected, you would use this event to dynamically adjust the screen.
+DANISH
 
 REPORT ZSELECT_SCREEN_DEMO.
 
