@@ -1,0 +1,48 @@
+REPORT ZPROG_DataStructure.
+
+PARAMETERS p_name TYPE C LENGTH 10.
+
+INITIALIZATION.
+p_name = 'Default value to Show'.
+
+START-OF-SELECTION
+WRITE: / 'The input value is ',p_name,'END' RIGHT-JUSTIFIED.
+
+========================================
+REPORT ZCUSTOMER_ORDERS.
+
+PARAMETERS: p_cust TYPE KNA1-KUNNR.
+
+*to Fetch the records from VBAK.
+START-OF-SELECTION.
+  SELECT * FROM VBAK
+    WHERE KUNNR = p_cust
+    INTO TABLE @DATA(lt_orders). "Pushing the data in internal table
+  
+  LOOP AT lt_orders INTO DATA(ls_order). 	"Pushing the value from internal table to work area.
+    WRITE: / ls_order-VBELN, ls_order-BSTNK.
+  ENDLOOP.
+
+==============================
+REPORT ZSELECT_SCREEN_DEMO.
+
+PARAMETERS: p_flag TYPE C AS CHECKBOX,
+            p_field1 TYPE CHAR10,
+            p_field2 TYPE CHAR10.
+
+AT SELECTION-SCREEN OUTPUT.
+
+  LOOP AT SCREEN.
+    IF p_flag = 'X'.
+      IF SCREEN-NAME = 'P_FIELD2'.
+        SCREEN-ACTIVE = 0.  " Hide field2 if checkbox is selected
+        MODIFY SCREEN.
+      ENDIF.
+    ELSE.
+      IF SCREEN-NAME = 'P_FIELD1'.
+        SCREEN-INPUT = 0.   " Make field1 non-editable if checkbox is not selected
+        MODIFY SCREEN.
+      ENDIF.
+    ENDIF.
+  ENDLOOP.
+
