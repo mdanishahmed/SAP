@@ -1,0 +1,60 @@
+INITIALIZATION is an event in SAP ABAP that gets triggered before the selection screen is displayed. This event is used to set default values or perform any initial setup required before the program's selection screen is presented to the user.
+
+If you want certain fields on the selection screen to have predefined values when the screen first appears, you use INITIALIZATION to set these values
+
+REPORT ZPROG_DataStructure.
+
+PARAMETERS p_name TYPE c LENGTH 10.
+
+INITIALIZATION.
+  p_name = 'DefaultName'. " Set a default value for the parameter
+
+START-OF-SELECTION.
+  WRITE: / 'The input value is', p_name, 'END' RIGHT-JUSTIFIED.
+
+=======================================================================
+
+START-OF-SELECTION is an event in SAP ABAP that marks the beginning of the main processing logic of an ABAP program, especially in report programs. It is the default processing block where the main program logic, such as reading data from the database, processing it, and preparing output, is usually implemented.
+
+In a report program that generates a list of customer orders, the START-OF-SELECTION event would be used to fetch the relevant order data from the database based on the selection criteria provided by the user on the selection screen.
+
+REPORT ZCUSTOMER_ORDERS.
+
+PARAMETERS: p_cust TYPE KNA1-KUNNR.
+
+START-OF-SELECTION.
+  SELECT * FROM VBAK
+    WHERE KUNNR = p_cust
+    INTO TABLE @DATA(lt_orders).
+  
+  LOOP AT lt_orders INTO DATA(ls_order).
+    WRITE: / ls_order-VBELN, ls_order-BSTNK.
+  ENDLOOP.
+
+=======================================================================
+AT SELECTION-SCREEN OUTPUT
+This event is triggered before the selection screen is displayed to the user. It is used to modify the selection screen dynamically, such as hiding or showing fields, changing field properties, or setting default values based on certain conditions.
+
+Dynamic Screen Modification: For example, if you have a selection screen with a checkbox and you want certain input fields to appear only when the checkbox is selected, you would use this event to dynamically adjust the screen.
+
+REPORT ZSELECT_SCREEN_DEMO.
+
+PARAMETERS: p_flag TYPE C AS CHECKBOX,
+            p_field1 TYPE CHAR10,
+            p_field2 TYPE CHAR10.
+
+AT SELECTION-SCREEN OUTPUT.
+
+  LOOP AT SCREEN.
+    IF p_flag = 'X'.
+      IF SCREEN-NAME = 'P_FIELD2'.
+        SCREEN-ACTIVE = 0.  " Hide field2 if checkbox is selected
+        MODIFY SCREEN.
+      ENDIF.
+    ELSE.
+      IF SCREEN-NAME = 'P_FIELD1'.
+        SCREEN-INPUT = 0.   " Make field1 non-editable if checkbox is not selected
+        MODIFY SCREEN.
+      ENDIF.
+    ENDIF.
+  ENDLOOP.
