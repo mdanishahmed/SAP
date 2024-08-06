@@ -10,8 +10,9 @@ INITIALIZATION.
   p_name = 'DefaultName'. " Set a default value for the parameter
 
 START-OF-SELECTION.
-  WRITE: / 'The input value is', p_name, 'END' RIGHT-JUSTIFIED.
-
+  WRITE: / 'The input value is ' RIGHT-JUSTIFIED,
+         p_name LEFT-JUSTIFIED,
+         ' END' CENTERED.
 =======================================================================
 
 START-OF-SELECTION is an event in SAP ABAP that marks the beginning of the main processing logic of an ABAP program, especially in report programs. It is the default processing block where the main program logic, such as reading data from the database, processing it, and preparing output, is usually implemented.
